@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,27 +12,46 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import LOGO from './assets/logo.png';
-
+import Button from '@mui/material/Button';
+var generator = require('generate-password-browser');
 
 function App() {
   const [config, setConfig] = useState({
     length: 10,
     numbers: false,
     symbols: false,
-    lowercase: false,
+    lowercase: true,
     uppercase: false
   });
+
+  const [generatedPasswordList, setGeneratedPasswordList] = useState([]);
+
+  const handleGenerate = () => {
+    const generatedPasswords = [
+      generator.generate({
+        ...config
+      }),
+      generator.generate({
+        ...config
+      }),
+      generator.generate({
+        ...config
+      })
+    ]
+    setGeneratedPasswordList(generatedPasswords)
+  }
 
   return (
     <section style={{ backgroundColor: '#2d2e32', width: window.innerWidth, height: window.innerHeight, minWidth: '100%', minHeight: '100%' }}>
       <div style={{ paddingTop: '150px', paddingLeft: '150px', paddingRight: '150px' }}>
         <Paper>
-          <div style={{ padding: '50px' }}>
+          <div style={{ padding: '20px' }}>
             <center>
               <img src={LOGO} style={{ width: '100px', height: '150px' }} />
               <Typography variant="h3" component="h2" fontWeight='bold'>
                 SecurePass
               </Typography>
+              <Button variant="contained" style={{ marginTop: '20px', backgroundColor: '#2d2e32', color: '#64f4ab', fontWeight: 'bold' }} onClick={handleGenerate}>Gerar</Button>
             </center>
           </div>
 
@@ -50,8 +69,13 @@ function App() {
                       <TableRow>
                         <TableCell align='left'><span style={{ paddingLeft: '36%' }}>
                           <Select
-                            value={0}
-                            // onChange={handleChange}
+                            value={config?.length}
+                            onChange={(e) => {
+                              setConfig({
+                                ...config,
+                                length: Number(e.target.value)
+                              })
+                            }}
                             style={{ paddingLeft: '10px' }}
                           >
                             <MenuItem value={0}>0</MenuItem>
@@ -78,16 +102,31 @@ function App() {
                           </Select><span style={{ paddingLeft: '10px' }}>Caracteres na senha</span></span></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox />Incluir Letras</span></TableCell>
+                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox checked={config?.numbers}
+                          onChange={(e) => {
+                            setConfig({
+                              ...config,
+                              numbers: Number(e.target.checked)
+                            })
+                          }} />Incluir Numeros</span></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox />Incluir Simbolos</span></TableCell>
+                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox checked={config?.symbols}
+                          onChange={(e) => {
+                            setConfig({
+                              ...config,
+                              symbols: Number(e.target.checked)
+                            })
+                          }} />Incluir Simbolos</span></TableCell>
                       </TableRow>
                       <TableRow>
-                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox />Incluir letras maiúsculas</span></TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell align='left'><span style={{ paddingLeft: '35%' }}><Checkbox />Incluir letras minusculas</span></TableCell>
+                        <TableCell align='left'><span style={{ paddingLeft: '35%' }} ><Checkbox checked={config?.uppercase}
+                          onChange={(e) => {
+                            setConfig({
+                              ...config,
+                              uppercase: Number(e.target.checked)
+                            })
+                          }} />Incluir letras maiúsculas</span></TableCell>
                       </TableRow>
                     </TableBody>
                   </Table>
@@ -104,9 +143,22 @@ function App() {
                       </TableRow>
                     </TableHead>
                     <TableBody>
-                      <TableRow>
-                        <TableCell align='center' style={{ fontWeight: 'bold' }}>Nenhuma senha gerada</TableCell>
-                      </TableRow>
+                      {
+                        generatedPasswordList.length === 0 && <TableRow>
+                          <TableCell align='center' style={{ fontWeight: 'bold' }}>Você não gerou nenhuma senha.</TableCell>
+                        </TableRow>
+                      }
+                      {
+                        generatedPasswordList.length !== 0 && <>
+                          {
+                            generatedPasswordList.map((password) => {
+                              return <TableRow>
+                                <TableCell align='center' style={{ fontWeight: 'bold' }}>{password}</TableCell>
+                              </TableRow>
+                            })
+                          }
+                        </>
+                      }
                     </TableBody>
                   </Table>
                 </TableContainer>
