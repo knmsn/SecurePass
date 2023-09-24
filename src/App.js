@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,6 +13,7 @@ import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 import LOGO from './assets/logo.png';
 import Button from '@mui/material/Button';
+import GitHubIcon from '@mui/icons-material/GitHub';
 var generator = require('generate-password-browser');
 
 function App() {
@@ -42,16 +43,16 @@ function App() {
   }
 
   return (
-    <section style={{ backgroundColor: '#2d2e32', width: window.innerWidth, height: window.innerHeight, minWidth: '100%', minHeight: '100%' }}>
-      <div style={{ paddingTop: '150px', paddingLeft: '150px', paddingRight: '150px' }}>
+    <section style={styles?.body}>
+      <div style={styles?.cardContainer}>
         <Paper>
           <div style={{ padding: '20px' }}>
             <center>
-              <img src={LOGO} style={{ width: '100px', height: '150px' }} />
+              <img src={LOGO} style={styles?.logo} />
               <Typography variant="h3" component="h2" fontWeight='bold'>
                 SecurePass
               </Typography>
-              <Button variant="contained" style={{ marginTop: '20px', backgroundColor: '#2d2e32', color: '#64f4ab', fontWeight: 'bold' }} onClick={handleGenerate}>Gerar</Button>
+              <Button variant="contained" style={{ marginTop: '20px', ...styles?.button }} onClick={handleGenerate}>Gerar</Button>
             </center>
           </div>
 
@@ -62,7 +63,7 @@ function App() {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell align="center" style={{ fontWeight: 'bold', backgroundColor: '#2d2e32', color: '#64f4ab' }}>Requisitos para a senha</TableCell>
+                        <TableCell align="center" style={styles?.tableHeader}>Requisitos para a senha</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -139,7 +140,7 @@ function App() {
                   <Table sx={{ minWidth: 650 }} aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell align="center" style={{ fontWeight: 'bold', backgroundColor: '#2d2e32', color: '#64f4ab' }}>Senhas Geradas</TableCell>
+                        <TableCell align="center" style={styles?.tableHeader}>Senhas Geradas</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -166,9 +167,26 @@ function App() {
             </Grid>
           </Grid>
         </Paper>
+        <center>
+          <div style={{ paddingTop: '30px' }}>
+            <Button variant="outlined" startIcon={<GitHubIcon />} style={{ marginTop: '20px', ...styles?.button }} onClick={() =>{
+              window.open('https://github.com/black-ctrl-alt-del/SecurePass')
+            }}>
+              Colaborar no github
+            </Button>
+          </div>
+        </center>
       </div>
     </section>
   );
 }
 
 export default App;
+
+const styles = {
+  body: { backgroundColor: '#2d2e32', width: window.innerWidth, height: window.innerHeight, minWidth: '100%', minHeight: '100%' },
+  cardContainer: { paddingTop: '150px', paddingLeft: '150px', paddingRight: '150px' },
+  logo: { width: '100px', height: '150px' },
+  button: {backgroundColor: '#2d2e32', color: '#64f4ab', fontWeight: 'bold'},
+  tableHeader: { fontWeight: 'bold', backgroundColor: '#2d2e32', color: '#64f4ab' }
+}
